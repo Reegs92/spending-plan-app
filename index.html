@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Continuous Spending Plan</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-left">
+      <h1>Continuous Spending Plan</h1>
+      <p class="tagline">Know where every dollar goes</p>
+    </div>
+    <div class="header-actions">
+      <button id="btn-import" class="btn btn-secondary" title="Import plan from CSV file">Import CSV</button>
+      <button id="btn-export" class="btn btn-secondary" title="Export plan as CSV file">Export CSV</button>
+      <button id="btn-reset" class="btn btn-danger" title="Clear all data">Reset</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- INCOME SECTION -->
+    <section class="card" id="income-section">
+      <h2>Income</h2>
+      <div class="income-inputs">
+        <div class="field">
+          <label for="income-amount">Amount</label>
+          <div class="income-dollar">
+            <input type="number" id="income-amount" min="0" step="0.01" placeholder="0.00">
+          </div>
+        </div>
+        <div class="field">
+          <label for="income-frequency">Paid</label>
+          <select id="income-frequency">
+            <option value="weekly">Weekly</option>
+            <option value="fortnightly">Fortnightly</option>
+            <option value="monthly" selected>Monthly</option>
+            <option value="yearly">Yearly</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+        <div class="field custom-days-field" id="income-custom-field" style="display:none">
+          <label for="income-custom-days">Every X days</label>
+          <input type="number" id="income-custom-days" min="1" step="1" placeholder="14">
+        </div>
+      </div>
+      <div class="income-conversions" id="income-conversions"></div>
+    </section>
+
+    <!-- EXPENSES SECTION -->
+    <section class="card" id="expenses-section">
+      <h2>Expenses</h2>
+      <div class="expenses-table-wrap">
+        <table class="expenses-table" id="expenses-table">
+          <thead>
+            <tr>
+              <th class="col-name">Expense</th>
+              <th class="col-amount">Weekly</th>
+              <th class="col-amount">Fortnightly</th>
+              <th class="col-amount">Monthly</th>
+              <th class="col-amount">Yearly</th>
+              <th class="col-account">Account</th>
+              <th class="col-actions">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="expenses-body"></tbody>
+        </table>
+      </div>
+      <button id="btn-add-expense" class="btn btn-primary">+ Add Expense</button>
+    </section>
+
+    <!-- ACCOUNTS SECTION -->
+    <section class="card" id="accounts-section">
+      <h2>Accounts</h2>
+      <p class="section-hint">Create accounts to distribute your expenses into separate spending buckets.</p>
+      <div id="accounts-list"></div>
+      <button id="btn-add-account" class="btn btn-primary">+ Add Account</button>
+    </section>
+
+    <!-- SUMMARY DASHBOARD -->
+    <section class="card" id="summary-section">
+      <h2>Summary</h2>
+      <div class="summary-frequency-wrap">
+        <label for="summary-frequency">View as:</label>
+        <select id="summary-frequency">
+          <option value="weekly">Weekly</option>
+          <option value="fortnightly">Fortnightly</option>
+          <option value="monthly" selected>Monthly</option>
+          <option value="yearly">Yearly</option>
+        </select>
+      </div>
+      <div class="summary-cards" id="summary-cards"></div>
+      <div class="account-breakdown" id="account-breakdown"></div>
+    </section>
+  </main>
+
+  <!-- AWARENESS MODAL -->
+  <div class="modal-overlay" id="awareness-modal" style="display:none">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modal-title">Spending Awareness</h3>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="awareness-calc">
+          <div class="field">
+            <label for="modal-times">How often?</label>
+            <div class="inline-group">
+              <input type="number" id="modal-times" min="0" step="0.5" placeholder="3">
+              <span>times per</span>
+              <select id="modal-period">
+                <option value="week">week</option>
+                <option value="fortnight">fortnight</option>
+                <option value="month">month</option>
+                <option value="year">year</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="modal-cost">Average cost each time ($)</label>
+            <input type="number" id="modal-cost" min="0" step="0.01" placeholder="20.00">
+          </div>
+          <div class="awareness-result" id="modal-result"></div>
+          <div class="field">
+            <label for="modal-whatif-times">What if you changed frequency?</label>
+            <input type="range" id="modal-whatif-times" min="0" max="20" step="0.5" value="0">
+            <span id="modal-whatif-label">0 times</span>
+          </div>
+          <div class="whatif-result" id="modal-whatif-result"></div>
+          <div class="field">
+            <label for="modal-notes">Notes</label>
+            <textarea id="modal-notes" rows="2" placeholder="e.g. Try meal prepping on Sundays..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="modal-cancel">Cancel</button>
+        <button class="btn btn-primary" id="modal-apply">Apply to Expense</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HIDDEN FILE INPUT FOR IMPORT -->
+  <input type="file" id="file-import" accept=".csv" style="display:none">
+
+  <footer class="app-footer">
+    <p>Continuous Spending Plan &mdash; Open Source &middot; <a href="https://github.com" target="_blank">GitHub</a></p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
