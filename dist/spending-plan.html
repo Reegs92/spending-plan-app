@@ -3,6 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#2563eb">
+  <meta name="description" content="Know where every dollar goes — free open-source budgeting app">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Spending Plan">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
   <title>Continuous Spending Plan</title>
   <style>
 /* === RESET & VARIABLES === */
@@ -191,6 +199,7 @@ textarea { resize: vertical; font-family: inherit; }
       <p class="tagline">Know where every dollar goes</p>
     </div>
     <div class="header-actions">
+      <button id="btn-install" class="btn btn-primary" title="Install as app" style="display:none">Install App</button>
       <button id="btn-import" class="btn btn-secondary" title="Import plan from CSV file">Import CSV</button>
       <button id="btn-export" class="btn btn-secondary" title="Export plan as CSV file">Export CSV</button>
       <button id="btn-reset" class="btn btn-danger" title="Clear all data">Reset</button>
@@ -379,6 +388,7 @@ function fmt(n) {
       <p class="tagline">Know where every dollar goes</p>
     </div>
     <div class="header-actions">
+      <button id="btn-install" class="btn btn-primary" title="Install as app" style="display:none">Install App</button>
       <button id="btn-import" class="btn btn-secondary" title="Import plan from CSV file">Import CSV</button>
       <button id="btn-export" class="btn btn-secondary" title="Export plan as CSV file">Export CSV</button>
       <button id="btn-reset" class="btn btn-danger" title="Clear all data">Reset</button>
@@ -719,6 +729,7 @@ input[type="range"] {
       <p class="tagline">Know where every dollar goes</p>
     </div>
     <div class="header-actions">
+      <button id="btn-install" class="btn btn-primary" title="Install as app" style="display:none">Install App</button>
       <button id="btn-import" class="btn btn-secondary" title="Import plan from CSV file">Import CSV</button>
       <button id="btn-export" class="btn btn-secondary" title="Export plan as CSV file">Export CSV</button>
       <button id="btn-reset" class="btn btn-danger" title="Clear all data">Reset</button>
@@ -1682,6 +1693,32 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeModal();
 });
 
+// === PWA: SERVICE WORKER & INSTALL ===
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
+
+let deferredInstallPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  document.getElementById('btn-install').style.display = '';
+});
+
+document.getElementById('btn-install').addEventListener('click', () => {
+  if (!deferredInstallPrompt) return;
+  deferredInstallPrompt.prompt();
+  deferredInstallPrompt.userChoice.then(result => {
+    deferredInstallPrompt = null;
+    document.getElementById('btn-install').style.display = 'none';
+  });
+});
+
+window.addEventListener('appinstalled', () => {
+  document.getElementById('btn-install').style.display = 'none';
+  deferredInstallPrompt = null;
+});
+
 // === INIT ===
 render();
 
@@ -1718,6 +1755,7 @@ render();
       <p class="tagline">Know where every dollar goes</p>
     </div>
     <div class="header-actions">
+      <button id="btn-install" class="btn btn-primary" title="Install as app" style="display:none">Install App</button>
       <button id="btn-import" class="btn btn-secondary" title="Import plan from CSV file">Import CSV</button>
       <button id="btn-export" class="btn btn-secondary" title="Export plan as CSV file">Export CSV</button>
       <button id="btn-reset" class="btn btn-danger" title="Clear all data">Reset</button>
@@ -2058,6 +2096,7 @@ input[type="range"] {
       <p class="tagline">Know where every dollar goes</p>
     </div>
     <div class="header-actions">
+      <button id="btn-install" class="btn btn-primary" title="Install as app" style="display:none">Install App</button>
       <button id="btn-import" class="btn btn-secondary" title="Import plan from CSV file">Import CSV</button>
       <button id="btn-export" class="btn btn-secondary" title="Export plan as CSV file">Export CSV</button>
       <button id="btn-reset" class="btn btn-danger" title="Clear all data">Reset</button>
