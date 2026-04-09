@@ -1,0 +1,357 @@
+:root {
+  --blue:   #4F86F7;
+  --green:  #22C55E;
+  --red:    #EF4444;
+  --bg:     #F8FAFC;
+  --card:   #FFFFFF;
+  --border: #E2E8F0;
+  --text:   #1E293B;
+  --muted:  #64748B;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 120px;
+}
+
+.app-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin: 0 0 1.5rem;
+}
+
+/* ---- Card ---- */
+.card {
+  background: var(--card);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.1);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.section-total {
+  margin-top: 1rem;
+  padding-top: .75rem;
+  border-top: 1px solid var(--border);
+  font-size: .875rem;
+  color: var(--muted);
+}
+
+.empty-state {
+  color: var(--muted);
+  font-size: .875rem;
+  margin: .5rem 0;
+}
+
+/* ---- Buttons ---- */
+.btn {
+  cursor: pointer;
+  border-radius: 8px;
+  padding: .5rem 1rem;
+  font-size: .875rem;
+  font-family: inherit;
+  transition: opacity .15s;
+}
+.btn:hover   { opacity: .85; }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+
+.btn-primary { background: var(--blue); color: white; border: none; }
+.btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
+.btn-danger  { background: transparent; color: var(--red); border: 1px solid var(--red); padding: .3rem .6rem; }
+.btn-sm      { padding: .3rem .6rem; font-size: .8rem; }
+.btn-icon    { background: transparent; border: 1px solid var(--border); padding: .3rem .5rem; font-size: .9rem; line-height: 1; }
+
+/* ---- Inputs ---- */
+.input {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: .4rem .6rem;
+  font-size: .875rem;
+  font-family: inherit;
+  width: 100%;
+  background: white;
+  color: var(--text);
+}
+.input:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(79,134,247,.15);
+}
+.input-sm { width: 80px; }
+
+/* ---- People ---- */
+.people-list    { display: flex; flex-direction: column; gap: .5rem; }
+.person-row     { display: flex; gap: .5rem; align-items: center; }
+.person-row .input { flex: 1; }
+
+/* ---- Income ---- */
+.income-list { display: flex; flex-direction: column; gap: .75rem; }
+.income-row  { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; }
+.income-row .input { min-width: 100px; flex: 1; }
+.income-weekly { font-size: .8rem; color: var(--muted); white-space: nowrap; }
+.income-totals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: .75rem;
+  border-top: 1px solid var(--border);
+  font-size: .875rem;
+}
+.income-subtotal { color: var(--muted); }
+.income-combined { font-weight: 600; margin-left: auto; }
+
+/* ---- Expense rows ---- */
+.expense-list { display: flex; flex-direction: column; }
+.expense-row {
+  padding: .75rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.expense-row:last-child { border-bottom: none; }
+.col-row {
+  border-left: 3px solid var(--blue);
+  padding-left: .6rem;
+}
+
+.expense-row-main  { display: flex; flex-direction: column; gap: .5rem; }
+.expense-name      { font-weight: 500; }
+
+.freq-inputs {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: .4rem;
+}
+
+.freq-label {
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+  font-size: .75rem;
+  color: var(--muted);
+}
+.freq-label .input { font-size: .8rem; padding: .3rem .4rem; }
+
+.expense-row-controls {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+.account-select { max-width: 180px; }
+.col-label {
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+  font-size: .85rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* ---- Spend Awareness Helper ---- */
+.awareness-helper {
+  background: #F1F5F9;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: .5rem;
+}
+.awareness-title {
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: .5rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+.awareness-inputs {
+  display: flex;
+  gap: .75rem;
+  flex-wrap: wrap;
+}
+.awareness-inputs label {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  font-size: .8rem;
+  color: var(--muted);
+  flex: 1;
+  min-width: 120px;
+}
+.awareness-results {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: .75rem;
+  flex-wrap: wrap;
+  font-size: .875rem;
+  font-weight: 500;
+}
+
+/* ---- Accounts ---- */
+.account-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: .75rem;
+}
+.account-card-top {
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+  margin-bottom: .75rem;
+}
+.account-name-input { flex: 1; }
+.account-card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+.colour-swatches { display: flex; gap: .4rem; }
+.colour-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform .1s;
+  padding: 0;
+}
+.colour-swatch:hover { transform: scale(1.15); }
+.colour-swatch.active { border-color: #1E293B; }
+.account-meta    { display: flex; align-items: center; gap: .75rem; font-size: .875rem; }
+.owner-pill      { background: #E2E8F0; border-radius: 99px; padding: .15rem .6rem; font-size: .8rem; font-weight: 500; }
+.allocated-label { color: var(--muted); }
+
+/* ---- Buffer Goal ---- */
+.buffer-col-info { margin-bottom: 1rem; font-size: .9rem; }
+.buffer-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+.buffer-controls label {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  font-size: .85rem;
+  color: var(--muted);
+}
+.buffer-controls label .input { width: 100px; }
+.unit-toggle    { display: flex; gap: .25rem; }
+.buffer-target  { font-size: 1.1rem; margin-bottom: 1rem; }
+.buffer-subtitle { font-size: .8rem; color: var(--muted); margin-left: .5rem; }
+.buffer-savings {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.buffer-savings label {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  font-size: .85rem;
+  color: var(--muted);
+  flex: 1;
+  min-width: 140px;
+}
+.buffer-summary { font-size: .85rem; color: var(--muted); margin: .5rem 0 0; }
+
+/* ---- Progress bar ---- */
+.progress-bar-wrap {
+  background: #E2E8F0;
+  border-radius: 99px;
+  height: 8px;
+  overflow: hidden;
+  margin-top: .5rem;
+}
+.progress-bar-fill {
+  background: var(--green);
+  height: 100%;
+  border-radius: 99px;
+  transition: width .3s ease;
+}
+
+/* ---- Summary bar ---- */
+#summary-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+.summary-bar {
+  background: white;
+  border-top: 1px solid var(--border);
+  padding: .75rem 1.5rem;
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  box-shadow: 0 -2px 8px rgba(0,0,0,.06);
+}
+.summary-main  { display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap; }
+.summary-item  { font-size: .875rem; }
+.surplus       { color: var(--green); font-weight: 700; }
+.deficit       { color: var(--red);   font-weight: 700; }
+.account-chips { display: flex; gap: .5rem; flex-wrap: wrap; }
+.account-chip  {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  background: #F1F5F9;
+  border-radius: 20px;
+  padding: .25rem .75rem;
+  font-size: .8rem;
+}
+.colour-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+  .freq-inputs      { grid-template-columns: repeat(3, 1fr); }
+  .income-row       { flex-direction: column; align-items: stretch; }
+  .income-combined  { margin-left: 0; }
+  .account-select   { max-width: 100%; flex: 1; }
+  .summary-bar      { flex-direction: column; align-items: flex-start; gap: .5rem; }
+  .summary-main     { gap: .75rem; }
+}
+
+@media (max-width: 480px) {
+  .freq-inputs  { grid-template-columns: repeat(2, 1fr); }
+  .card         { padding: 1rem; }
+  main          { padding: 1rem .75rem 140px; }
+}
