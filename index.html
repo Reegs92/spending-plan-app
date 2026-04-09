@@ -1,13 +1,219 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>spending-plan-app</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#2563eb">
+  <meta name="description" content="Know where every dollar goes — free open-source spending plan">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Spending Plan">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+  <title>Spending Plan</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="header-left">
+      <h1>Spending Plan</h1>
+      <p class="tagline">Know where every dollar goes</p>
+    </div>
+    <nav class="header-nav">
+      <a href="#people-section" class="nav-link">People</a>
+      <a href="#income-section" class="nav-link">Income</a>
+      <a href="#expenses-section" class="nav-link">Expenses</a>
+      <a href="#accounts-section" class="nav-link">Accounts</a>
+      <a href="#buffer-section" class="nav-link">Buffer</a>
+    </nav>
+    <div class="header-actions">
+      <button id="btn-install" class="btn btn-secondary" style="display:none" title="Install as app">Install App</button>
+      <button id="btn-export" class="btn btn-secondary" title="Export plan as CSV">Export CSV</button>
+      <button id="btn-import" class="btn btn-secondary" title="Import plan from CSV">Import CSV</button>
+      <button id="btn-reset" class="btn btn-danger" title="Clear all data">Reset</button>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ===== PEOPLE ===== -->
+    <section class="card" id="people-section">
+      <h2>People</h2>
+      <p class="section-hint">People listed here can own income sources and accounts.</p>
+      <ul id="people-list" class="people-list"></ul>
+      <div class="add-row">
+        <input type="text" id="new-person-name" placeholder="Name" maxlength="50">
+        <button id="btn-add-person" class="btn btn-primary">Add Person</button>
+      </div>
+    </section>
+
+    <!-- ===== INCOME ===== -->
+    <section class="card" id="income-section">
+      <div class="section-header-row">
+        <h2>Income</h2>
+      </div>
+      <p class="section-hint">All amounts normalised to weekly. Add multiple sources and see per-person and combined totals.</p>
+      <div class="table-scroll">
+        <table class="data-table" id="income-table">
+          <thead>
+            <tr>
+              <th>Person</th>
+              <th>Source</th>
+              <th class="col-amount">Amount</th>
+              <th>Frequency</th>
+              <th>Times/yr</th>
+              <th class="col-weekly-h">Weekly</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="income-body"></tbody>
+        </table>
+      </div>
+      <button id="btn-add-income" class="btn btn-primary" style="margin-top:12px">+ Add Income Source</button>
+      <div id="income-totals" class="income-totals" style="display:none"></div>
+    </section>
+
+    <!-- ===== EXPENSES ===== -->
+    <section class="card" id="expenses-section">
+      <div class="section-header-row">
+        <h2>Expenses</h2>
+      </div>
+      <p class="section-hint">
+        Enter an amount in any frequency column — the rest auto-fill.
+        Tick <strong>CoL</strong> to include in your Buffer Goal.
+        Click <strong>≈</strong> to open the Spend Awareness Helper.
+      </p>
+      <div class="table-scroll">
+        <table class="data-table expense-table" id="expenses-table">
+          <thead>
+            <tr>
+              <th class="col-name">Name</th>
+              <th class="col-amount">Weekly</th>
+              <th class="col-amount">Fortnightly</th>
+              <th class="col-amount">Monthly</th>
+              <th class="col-amount">Yearly</th>
+              <th class="col-custom">Custom</th>
+              <th class="col-account">Account</th>
+              <th class="col-col" title="Cost of Living">CoL</th>
+              <th class="col-actions"></th>
+            </tr>
+          </thead>
+          <tbody id="expenses-body"></tbody>
+          <tfoot>
+            <tr>
+              <td colspan="9" id="expenses-footer-total" class="footer-total"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <button id="btn-add-expense" class="btn btn-primary" style="margin-top:12px">+ Add Expense</button>
+    </section>
+
+    <!-- ===== ACCOUNTS ===== -->
+    <section class="card" id="accounts-section">
+      <h2>Accounts</h2>
+      <p class="section-hint">Assign a colour and owner (Joint or a specific person) to each account. Expenses are allocated here.</p>
+      <div id="accounts-container" class="accounts-grid"></div>
+      <button id="btn-add-account" class="btn btn-primary" style="margin-top:12px">+ Add Account</button>
+    </section>
+
+    <!-- ===== BUFFER GOAL ===== -->
+    <section class="card" id="buffer-section">
+      <h2>Buffer Goal Calculator</h2>
+      <p class="section-hint">
+        Based on your Cost of Living (CoL) expenses:
+        <strong id="bg-col-weekly">$0.00/wk</strong>
+        <span id="bg-col-hint"></span>
+      </p>
+      <div class="buffer-grid">
+        <div class="field">
+          <label>Multiplier</label>
+          <div class="buffer-multi-row">
+            <input type="number" id="bg-multiplier" min="0" step="0.5" value="3" class="num-input">
+            <div class="unit-toggle">
+              <button class="unit-toggle-btn" data-unit="weeks">Weeks</button>
+              <button class="unit-toggle-btn active" data-unit="months">Months</button>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Save by</label>
+          <input type="date" id="bg-save-by">
+        </div>
+        <div class="field">
+          <label>Weekly savings needed</label>
+          <div class="dollar-input">
+            <input type="number" id="bg-weekly-needed" min="0" step="0.01" placeholder="e.g. 200" class="num-input">
+          </div>
+        </div>
+        <div class="field">
+          <label>Saved so far</label>
+          <div class="dollar-input">
+            <input type="number" id="bg-saved-so-far" min="0" step="0.01" placeholder="0.00" class="num-input">
+          </div>
+        </div>
+      </div>
+      <div class="buffer-summary" id="buffer-summary">
+        <p id="bg-headline" class="bg-headline"></p>
+        <div class="progress-wrap">
+          <div class="progress-bar-track">
+            <div class="progress-fill" id="bg-progress-fill" style="width:0%"></div>
+          </div>
+          <div class="progress-labels">
+            <span id="bg-saved-label">$0.00 saved</span>
+            <span id="bg-progress-label">0%</span>
+            <span id="bg-goal-label">$0.00 goal</span>
+          </div>
+        </div>
+        <div class="buffer-achieved" id="bg-achieved" style="display:none">
+          Goal reached! Your buffer is fully funded. &#127881;
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- REASSIGN MODAL -->
+  <div class="modal-overlay" id="reassign-modal" style="display:none">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Reassign Expenses</h3>
+        <button class="modal-close" id="reassign-modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="reassign-modal-msg"></p>
+        <div id="reassign-options" class="reassign-options"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STICKY SUMMARY FOOTER -->
+  <footer class="summary-bar" id="summary-bar">
+    <div class="summary-inner">
+      <div class="summary-block">
+        <span class="bar-label">Income</span>
+        <span class="bar-value positive" id="bar-income">$0.00</span>
+        <span class="bar-freq">/wk</span>
+      </div>
+      <div class="summary-block">
+        <span class="bar-label">Expenses</span>
+        <span class="bar-value" id="bar-expenses">$0.00</span>
+        <span class="bar-freq">/wk</span>
+      </div>
+      <div class="summary-block surplus-block">
+        <span class="bar-label" id="bar-surplus-label">Surplus</span>
+        <span class="bar-value positive" id="bar-surplus">$0.00</span>
+        <span class="bar-freq">/wk</span>
+      </div>
+      <div class="bar-accounts" id="bar-accounts"></div>
+    </div>
+  </footer>
+
+  <!-- HIDDEN FILE INPUT -->
+  <input type="file" id="file-import" accept=".csv" style="display:none">
+
+  <script src="app.js"></script>
+</body>
 </html>

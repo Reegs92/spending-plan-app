@@ -1,18 +1,19 @@
 # Spending Plan
 
-A clean, open-source personal finance web app built with React + Vite. No external UI libraries. All data persists in `localStorage`.
+A free, open-source spending plan app — vanilla HTML, CSS, and JavaScript. No build tools required to run. Installable as a PWA on Windows, Android, and iOS.
 
 ## Features
 
-| Section | What it does |
-|---|---|
-| **People** | Add/remove people. Feeds into income and account ownership. |
-| **Income** | Track income sources per person with frequency normalisation to weekly. Per-person and combined totals. |
-| **Expenses** | Enter amounts in any frequency column (weekly/fortnightly/monthly/yearly/custom) — the rest auto-calculate. Assign expenses to accounts. Mark Cost of Living rows (CoL). |
-| **Spend Awareness Helper** | Per-row helper: times-per-week × avg-spend → weekly/monthly/yearly projection with a "Use this" button. |
-| **Accounts** | Named accounts with owner (Joint or a specific person) and colour. Shows weekly allocation total. |
-| **Buffer Goal Calculator** | Auto-sums CoL expenses. Set a multiplier + Weeks/Months unit to calculate a buffer target. "Save by" date and "weekly savings needed" are linked — edit one, the other calculates. Progress bar toward goal. |
-| **Summary Bar** | Sticky footer showing total income/week, total expenses/week, surplus/deficit, and per-account breakdown. |
+- **People** — add household members; income sources and accounts are owned by a person or marked Joint
+- **Income** — multiple sources per person, any frequency (Weekly / Fortnightly / Monthly / Yearly / Custom), all normalised to weekly with per-person and combined totals
+- **Expenses** — enter any frequency column, the rest auto-fill; assign to an account; mark Cost of Living (CoL) rows for the buffer calculator
+- **Spend Awareness Helper** — per-row collapsible helper: times/week × avg spend → weekly / monthly / yearly breakdown with a "Use this" button
+- **Accounts** — named accounts with owner (Joint or person), 6 colour options, weekly allocation total; delete prompts reassignment of affected expenses
+- **Buffer Goal Calculator** — auto-sums CoL expenses; set a multiplier × Weeks or Months → buffer target; "Save by" date and "Weekly savings needed" are linked (edit one, the other calculates); progress bar toward goal
+- **Summary bar** — sticky footer showing income / expenses / surplus (green) or deficit (red) / per-account chips with colour dots
+- **Import / Export CSV** — portable data
+- **Auto-save** — all data persists in `localStorage`
+- **Offline-ready PWA** — installable, works without internet
 
 ## Frequency Conversions
 
@@ -26,40 +27,27 @@ A clean, open-source personal finance web app built with React + Vite. No extern
 
 ## Getting Started
 
+Just open `index.html` in any modern browser — no server or build step needed.
+
 ```bash
-npm install
-npm run dev
+# Optional: build a single self-contained HTML file
+node build.js
+# → dist/spending-plan.html
 ```
 
-Open `http://localhost:5173` in your browser.
-
-## Project Structure
+## File Structure
 
 ```
-src/
-  App.jsx                         # Root state, localStorage sync
-  App.css                         # All styles (fintech light-mode)
-  components/
-    PeopleSection.jsx
-    IncomeSection.jsx
-    ExpenseTable.jsx
-    ExpenseRow.jsx
-    SpendAwarenessHelper.jsx
-    AccountsSection.jsx
-    BufferGoalCalculator.jsx
-    SummaryBar.jsx
-  utils/
-    frequency.js                  # toWeekly / fromWeekly helpers
-    storage.js                    # localStorage load/save/clear
+index.html       Main app shell
+style.css        All styles
+app.js           All logic (vanilla JS, ~500 lines)
+build.js         Bundles into dist/spending-plan.html
+sw.js            Service worker (offline / PWA)
+manifest.json    PWA manifest
+icons/           SVG app icons
+dist/            Built single-file output (git-ignored)
 ```
-
-## Tech Stack
-
-- [React 19](https://react.dev/)
-- [Vite 8](https://vite.dev/)
-- No external UI libraries
-- `localStorage` for persistence
 
 ## License
 
-MIT
+MIT — use it, fork it, improve it.
