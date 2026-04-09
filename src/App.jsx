@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import './App.css';
 import { loadState, saveState } from './utils/storage';
 import { defaultState, uid } from './utils/defaults';
 import PeopleSection from './components/PeopleSection';
